@@ -22,6 +22,8 @@ class ZApiReceiver(ZApi):
         self.sender = data.get('senderName', None)
         self.phone = data.get('phone')
         self.text = data.get('text', {}).get('message')
+        self.is_group = data.get('isGroup', False)
+        self.chat_name = data.get('chatName')
         
 class ZApiSender(ZApi):
     def __init__(self, data) -> None:

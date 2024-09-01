@@ -15,6 +15,13 @@ def from_user_response():
         mimetype='application/json'
     )
 
+def incorrect_chat_response():
+    return Response(
+        json.dumps({"status": "message sent from a incorrect chat"}),
+        status=200,
+        mimetype='application/json'
+    )
+
 def not_authorized_response():
     return Response(
         json.dumps({"error": "Unauthorized"}),

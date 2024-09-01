@@ -5,12 +5,13 @@ from flask import Flask, request, Response
 from manager_ia import ManagerIA
 from z_api import ZApiReceiver, ZApiSender
 from threading import Thread
-from responses import success_response, from_user_response, service_off_response, not_authorized_response
+from responses import success_response, from_user_response, service_off_response, not_authorized_response, incorrect_chat_response
 load_dotenv()
 
 app = Flask(__name__)
 
 Z_API_TOKEN = os.getenv('ZAPI')
+GROUP_ID = os.getenv('GROUP_ID')
 
 @app.before_request
 def before_request_middleware():
@@ -30,6 +31,10 @@ def manager():
     receiver = ZApiReceiver(request.json)
     if receiver.from_me:
         return from_user_response()
+    if not receiver.is_group or receiver.chat_name != 'ManagerIA':
+        return incorrect_chat_response()
+    if receiver.phone != GROUP_ID:
+        return incorrect_chat_response()
     
     def send_response():
         manager_ia_data = {'content':receiver.text}
